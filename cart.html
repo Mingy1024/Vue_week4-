@@ -85,6 +85,7 @@
             </tbody>
           </table>
           <!-- 購物車列表 -->
+          <pagination :pages="pagination" @emit-pages="getProduct"></pagination>
           <div class="text-end">
             <button
               class="btn btn-outline-danger"

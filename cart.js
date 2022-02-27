@@ -1,23 +1,30 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.31/vue.esm-browser.min.js";
+import pagination from "./pagination.js";
 
 const apiUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "mingyo";
 
 const app = createApp({
+  components:{
+    pagination
+  },
   data() {
     return {
       products: [],
       cartData: {},
       productId: "",
       isLoadingItem:'',
+      pagination:{},
     };
   },
   methods: {
-    getProduct() {
-      axios.get(`${apiUrl}/api/${apiPath}/products`).then((res) => {
+    getProduct(page = 1) {
+      axios.get(`${apiUrl}/api/${apiPath}/products/?page=${page}`).then((res) => {
         console.log(res);
         this.products = res.data.products;
+        this.pagination = res.data.pagination;
         console.log(this.products);
+        console.log(this.pagination);
       });
     },
     openProductModal(id) {
