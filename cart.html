@@ -77,7 +77,7 @@
                         role="status"
                         v-if="isLoadingItem === product.id"
                       ></span>
-                      加到購物車
+                      加入購物車
                     </button>
                   </div>
                 </td>
@@ -269,7 +269,7 @@
     </div>
     <script type="text/x-template" id="userProductModal">
       <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
-           aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
+           aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal" >
         <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
@@ -297,7 +297,7 @@
                     <div class="input-group">
                       <input type="number" class="form-control"
                              min="1" v-model="qty">
-                      <button type="button" class="btn btn-primary" @click="addToCart()">加入購物車</button>
+                      <button type="button" class="btn btn-primary" @click="addToCart" >加入購物車</button>
             </div>
             </div>
             </div>
@@ -308,7 +308,7 @@
             </div>
             </div>
     </script>
-
+    <script src="https://unpkg.com/vue@next"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"
       integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
