@@ -3,17 +3,46 @@ import pagination from "./pagination.js";
 const apiUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "mingyo";
 
+const { defineRule, Form, Field, ErrorMessage, configure } = VeeValidate;
+const { required, email, min, max } = VeeValidateRules;
+const { localize, loadLocaleFromURL } = VeeValidateI18n;
+
+defineRule('required', required);
+defineRule('email', email);
+defineRule('min', min);
+defineRule('max', max);
+
+loadLocaleFromURL('https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json');
+
+configure({
+  generateMessage: localize('zh_TW'),
+});
+
 const app = Vue.createApp({
   components:{
-    pagination
+    pagination,
+    vForm: Form,
+    vField: Field,
+    errorMessage: ErrorMessage,
   },
   data() {
     return {
       products: [],
-      cartData: {},
+      cartData: {
+        carts:[]
+      },
       productId: "",
       isLoadingItem:'',
       pagination:{},
+      form: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+        },
+        message: '',
+      },
     };
   },
   methods: {
@@ -74,7 +103,17 @@ const app = Vue.createApp({
         this.getCart();
         this.isLoadingItem = '';
       });
-    }
+    },
+    createOrder() {
+      axios.post(`${apiUrl}/api/${apiPath}/order`, { data: this.form }).then((res) => {
+        alert(res.data.message);
+        this.$refs.form.resetForm();
+        this.form.message = '';
+        this.getCart();
+      }).catch((err) => {
+        alert(err.data.message);
+      });
+    },
   },
   mounted() {
     this.getProduct();

@@ -91,7 +91,7 @@
               class="btn btn-outline-danger"
               type="button"
               @click="removeEntireCart"
-              :disabled="isLoadingItem === true"
+              :disabled="isLoadingItem || !cartData.carts.length"
             >
               <span
                 class="spinner-border spinner-border-sm"
@@ -184,7 +184,7 @@
           </table>
         </div>
         <div class="my-5 row justify-content-center">
-          <!-- <v-form ref="form" class="col-md-6" v-slot="{ errors }">
+          <v-form ref="form" class="col-md-6" v-slot="{ errors }" @submit="createOrder">
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <v-field
@@ -194,6 +194,8 @@
                 class="form-control"
                 :class="{ 'is-invalid': errors['email'] }"
                 placeholder="請輸入 Email"
+                rules="email|required"
+                v-model="form.user.email"
               ></v-field>
               <error-message
                 name="email"
@@ -211,6 +213,7 @@
                 :class="{ 'is-invalid': errors['姓名'] }"
                 placeholder="請輸入姓名"
                 rules="required"
+                v-model="form.user.name"
               ></v-field>
               <error-message
                 name="姓名"
@@ -227,6 +230,8 @@
                 class="form-control"
                 :class="{ 'is-invalid': errors['電話'] }"
                 placeholder="請輸入電話"
+                rules="min:8|max:10|required"
+                v-model="form.user.tel"
               ></v-field>
               <error-message
                 name="電話"
@@ -244,13 +249,13 @@
                 :class="{ 'is-invalid': errors['地址'] }"
                 placeholder="請輸入地址"
                 rules="required"
+                v-model="form.user.address"
               ></v-field>
               <error-message
                 name="地址"
                 class="invalid-feedback"
               ></error-message>
             </div>
-
             <div class="mb-3">
               <label for="message" class="form-label">留言</label>
               <textarea
@@ -258,32 +263,33 @@
                 class="form-control"
                 cols="30"
                 rows="10"
+                v-model="form.message"
               ></textarea>
             </div>
             <div class="text-end">
-              <button type="submit" class="btn btn-danger">送出訂單</button>
+              <button type="submit" class="btn btn-danger" :disabled="Object.keys(errors).length > 0 || !cartData.carts.length">送出訂單</button>
             </div>
-          </v-form> -->
+          </v-form>
         </div>
       </div>
     </div>
     <script type="text/x-template" id="userProductModal">
       <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
-           aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal" >
+       aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
         <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
               <h5 class="modal-title" id="exampleModalLabel">
                 <span>{{ product.title }}</span>
-            </h5>
+              </h5>
               <button type="button" class="btn-close"
                       data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div class="row">
                 <div class="col-sm-6">
-                  <img class="img-fluid" :src="product.imageUrl" alt="">
-            </div>
+                  <img class="img-fluid" :src="product.imagesUrl" alt="">
+                </div>
                 <div class="col-sm-6">
                   <span class="badge bg-primary rounded-pill">{{ product.category }}</span>
                   <p>商品描述：{{ product.description }}</p>
@@ -295,20 +301,20 @@
                   </div>
                   <div>
                     <div class="input-group">
-                      <input type="number" class="form-control"
-                             min="1" v-model="qty">
-                      <button type="button" class="btn btn-primary" @click="addToCart" >加入購物車</button>
-            </div>
-            </div>
-            </div>
+                        <input type="number" class="form-control"
+                               min="1" v-model="qty">
+                        <button type="button" class="btn btn-primary" @click="addToCart" >加入購物車</button>
+                    </div>
+                  </div>
+                </div>
                 <!-- col-sm-6 end -->
+              </div>
             </div>
-            </div>
-            </div>
-            </div>
-            </div>
+          </div>
+        </div>
+      </div>
     </script>
-    <script src="https://unpkg.com/vue@next"></script>
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"
       integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
@@ -324,7 +330,10 @@
       integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
       crossorigin="anonymous"
     ></script>
-
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.5.8/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.5.8/dist/vee-validate-rules.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.5.8/dist/vee-validate-i18n.min.js"></script>
     <script src="./cart.js" type="module"></script>
   </body>
 </html>
